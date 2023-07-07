@@ -1,0 +1,19 @@
+<div>
+  <p id="pTitle">Lista de Productos - Vista Estatica</p>
+  <div>
+    <ul id="ulProducts"> 
+      {{#each products}}
+      <li id="liProducts"> Product ID: {{id}}
+        <ul><label id="Black">Name: </label> {{title}}</ul>
+        <ul><label id="Black">Description: </label>{{description}}</ul>
+        <ul><label id="Black">Code: </label> {{code}}</ul>
+        <ul><label id="Black">Price: </label> {{price}}</ul>
+        <ul><label id="Black">Status: </label> {{status}}</ul>
+        <ul><label id="Black">Category: </label> {{category}}</ul>
+        <ul><label id="Black">Image: </label> {{thumbnail}}</ul>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+  
+<script src="/socket.io/socket.io.js"></script>
