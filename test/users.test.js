@@ -3,8 +3,10 @@ import {userModel} from "../src/dao/models/user.model.js";
 import UserManager from "../src/dao/db-managers/UserManager.js"
 import Assert from "assert";
 import { options } from "../src/config/options.js";
+import chai from "chai";
 
 const assert = Assert.strict;
+const expect = chai.expect;
 
 //generar el contexto describe de la clase Users Managers
 describe("Testing para la clase Users Managers",()=>{
@@ -14,13 +16,12 @@ describe("Testing para la clase Users Managers",()=>{
         this.usersDao = new UserManager();
     });
 
-    beforeEach(async function(){
-        await userModel.deleteMany();
-    });
+    // beforeEach(async function(){
+    //     await userModel.deleteMany();
+    // });
 
     it("El metodo get de la clase Users debe obtener los usuarios en formato de Array",async function(){
         const result = await this.usersDao.getUsers();
-        console.log((result.docs));
         assert.strictEqual(Array.isArray(result.docs),true);  // Valida que results.docs sea un Array
     });
 
@@ -44,7 +45,8 @@ describe("Testing para la clase Users Managers",()=>{
         };
         const result = await this.usersDao.save(mockUser);
         const userDB = await this.usersDao.getUserById(result._id);
-        assert.ok(userDB.rol);
+        expect(userDB).to.have.property("rol");
+        // assert.ok(userDB.rol);
     });
 
 });

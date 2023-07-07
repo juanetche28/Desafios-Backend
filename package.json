@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha test/products.test.js",
+    "test": "mocha test/integration.test.js",
     "start": "nodemon ./src/app.js"
   },
   "keywords": [],
