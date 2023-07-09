@@ -3,13 +3,15 @@ import { UserManager } from "../dao/index.js";
 import passport from "passport";
 import { sendRecoveryPass } from "../utils/email.js";
 import { generateEmailToken, verifyEmailToken, isValidPassword, createHash } from "../utils.js";
+import jwt from 'jsonwebtoken';
+import UserDTO from '../dto/User.dto.js';
 
 
 const userManager = new UserManager();
 
 //rutas de autenticacion "signupStrategy" definida en passport.config
-export const passportSignupController = passport.authenticate("signupStrategy",{failureRedirect:"/api/sessions/failure-signup"});
-export const successRegisterController = (req,res)=>{res.send('successfully registered user. <a href="/">Home</a>')};
+const passportSignupController = passport.authenticate("signupStrategy",{failureRedirect:"/api/sessions/failure-signup"});
+const successRegisterController = (req,res)=>{res.send('successfully registered user. <a href="/">Home</a>')};
 // export const failureRegisterController = (req,res)=>{
 //     CustomError.createError({
 //         name:"User create error",
@@ -18,29 +20,31 @@ export const successRegisterController = (req,res)=>{res.send('successfully regi
 //         errorCode:EError.INVALID_JSON
 //     });
 // };
-export const failureRegisterController = (req,res)=>{res.send('Could not register the user. <a href="/">Home</a>')};
+const failureRegisterController = (req,res)=>{res.send('Could not register the user. <a href="/">Home</a>')};
 
 //rutas de autenticacion "githubSignup" definida en passport.config
-export const passportGithubSignupController = passport.authenticate("githubSignup");
-export const failureSignupGihubController = passport.authenticate("githubSignup",{failureRedirect:"/api/sessions/failure-signup"})
-export const successSignupGihubController = (req,res)=>{res.send('Authenticated user. <a href="/">Home</a>')};
+const passportGithubSignupController = passport.authenticate("githubSignup");
+const failureSignupGihubController = passport.authenticate("githubSignup",{failureRedirect:"/api/sessions/failure-signup"})
+const successSignupGihubController = (req,res)=>{res.send('Authenticated user. <a href="/">Home</a>')};
    
 //rutas de autenticacion "login" definida en passport.config
 
-export const passportLoginController =  passport.authenticate("login", {failureRedirect: "/api/sessions/login-failed",});
-export const checkCredentials = async (req, res) => {
+const passportLoginController =  passport.authenticate("login", {failureRedirect: "/api/sessions/login-failed",});
+const checkCredentials = async (req, res) => {
     if (!req.user) {
         return res.status(401).send('Invalid Credentials. <a href="/">Home</a>');
     }
     req.session.userId = req.user._id;
-    res.redirect("/profile");
+    const userDto = UserDTO.getUserTokenFrom(req.user);
+    const token = jwt.sign(userDto,'tokenSecretJWT',{expiresIn:"1h"});   // Genero un token JWT que luego lo uso para verificar con la clave secreta "tokenSecretJWT"
+    res.cookie('backendCookie',token,{maxAge:3600000}).redirect("/profile"); // Guardo el token en la cookie "backendCookie". La veo con req.cookies['backendCookie']
 };
 
-export const loginFailController = (req,res)=>{
+const loginFailController = (req,res)=>{
     req.logger.error("failed");
     res.send('Failed Login. <a href="/">Home</a>')};
 
-export const forgotPasswordController = async (req,res) =>{
+const forgotPasswordController = async (req,res) =>{
     try {
         const {email} = req.body;
         //verificamos que el usuario exista
@@ -57,7 +61,7 @@ export const forgotPasswordController = async (req,res) =>{
     }
 };
 
-export const resetPasswordController = async (req,res) => {
+const resetPasswordController = async (req,res) => {
     try {
         const token = req.query.token;
         const {email, newPassword} = req.body;
@@ -84,7 +88,7 @@ export const resetPasswordController = async (req,res) => {
     }
 };
 
-export const logoutSessionController = (req,res)=>{
+const logoutSessionController = (req,res)=>{
     //rq.logOut elimina la propiedad req.user y limpia la sesion de autenticacion actual
     req.logOut(error=>{
         if(error){
@@ -98,5 +102,29 @@ export const logoutSessionController = (req,res)=>{
         }
     })
 };
+
+const current = async(req,res) =>{
+    const cookie = req.cookies['backendCookie']  // Recupero mi token guardado en la cookie "backenCookie"
+    const user = jwt.verify(cookie,'tokenSecretJWT');
+    if(user)
+        return res.send({status:"success",payload:user})
+}
+
+export default{
+    passportSignupController, 
+    successRegisterController, 
+    failureRegisterController, 
+    passportGithubSignupController, 
+    failureSignupGihubController, 
+    successSignupGihubController, 
+    passportLoginController, 
+    checkCredentials, 
+    loginFailController, 
+    forgotPasswordController,
+    resetPasswordController, 
+    logoutSessionController,
+    current
+}
+
 
 

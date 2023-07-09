@@ -39,9 +39,11 @@ describe("Testing para la clase Products Managers",()=>{
                 "Sin Imagen2_Actualizado"
             ]
         };
-        const result = await this.productsDao.addProduct(mockProduct);
-        console.log("result: ", result)
-        assert.ok(result._id);  // Valida que haya generado el ObjetcId caracteristico de MongoDB
+        const result = await this.productsDao.addProduct(mockProduct.title, mockProduct.description, mockProduct.code, mockProduct.price, mockProduct.status, mockProduct.stock, mockProduct.category, mockProduct.thumbnail);
+        // console.log("result: ", result)
+        const productDB = await this.productsDao.getProductById(mockProduct.code);
+        console.log("productDB",productDB)
+        assert.ok(productDB._id);  // Valida que haya generado el ObjetcId caracteristico de MongoDB
     });
 
     it("Al agregar un nuevo Producto, éste debe crearse con un owner por defecto",async function(){
@@ -55,9 +57,9 @@ describe("Testing para la clase Products Managers",()=>{
             category:"Difusores",
             thumbnail: []
         };
-        const result = await this.productsDao.addProduct(mockProduct);
-        const productDB = await this.productsDao.getProductById(result._id);
-        console.log("productDB",productDB);
+        const result = await this.productsDao.addProduct(mockProduct.title, mockProduct.description, mockProduct.code, mockProduct.price, mockProduct.status, mockProduct.stock, mockProduct.category, mockProduct.thumbnail);
+        const productDB = await this.productsDao.getProductById(mockProduct.code);
+        // console.log("productDB",productDB);
         assert.ok(productDB.owner);
     });
 

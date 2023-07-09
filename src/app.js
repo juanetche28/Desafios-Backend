@@ -18,6 +18,7 @@ import { addLogger } from "./utils/logger.js";
 import { errorHandler } from "./middlewares/errorHandler.js";  // Middleware de manejo de errores. Lo ejecuto luego de las rutas para capturar los errors 
 import { swaggerSpecs } from './config/docConfig.js';
 import swaggerUi from "swagger-ui-express";
+import cookieParser from 'cookie-parser';
 
 
 const ChatManager = new chatManager();
@@ -27,6 +28,7 @@ const app = express();
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
+app.use(cookieParser());
 
 //configuracion de la sesion
 app.use(session({

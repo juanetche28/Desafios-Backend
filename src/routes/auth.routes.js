@@ -1,27 +1,29 @@
 import {Router} from "express";
-import {passportSignupController, successRegisterController, failureRegisterController, passportGithubSignupController, failureSignupGihubController, successSignupGihubController, passportLoginController, checkCredentials, loginFailController, forgotPasswordController,resetPasswordController, logoutSessionController} from "../controllers/auth.controller.js"
+import authController from "../controllers/auth.controller.js"
 
 const router = Router();
 
 //rutas de autenticacion "signupStrategy" definida en passport.config
-router.post("/signup",passportSignupController,successRegisterController);
-router.get("/failure-signup",failureRegisterController);
+router.post("/signup",authController.passportSignupController,authController.successRegisterController);
+router.get("/failure-signup",authController.failureRegisterController);
 
 //rutas de autenticacion "githubSignup" definida en passport.config
-router.get("/github", passportGithubSignupController);
-router.get("/github-callback",failureSignupGihubController,successSignupGihubController)
+router.get("/github", authController.passportGithubSignupController);
+router.get("/github-callback",authController.failureSignupGihubController,authController.successSignupGihubController)
    
 //rutas de autenticacion "login" definida en passport.config
-router.post("/login", passportLoginController, checkCredentials);
-router.get("/login-failed",loginFailController);
+router.post("/login", authController.passportLoginController, authController.checkCredentials);
+router.get("/login-failed",authController.loginFailController);
 
 
 //rutas de Olvido de contraseña definidas en controllers -> auth.controllers.js
-router.post("/forgot-password", forgotPasswordController);
-router.post("/reset-password", resetPasswordController);
+router.post("/forgot-password", authController.forgotPasswordController);
+router.post("/reset-password", authController.resetPasswordController);
 
 
 //Borrar toda la sesion del usuario loggeado 
-router.get("/logout",logoutSessionController)
+router.get("/logout",authController.logoutSessionController)
+
+router.get('/current',authController.current);
 
 export {router as AuthRouter};
