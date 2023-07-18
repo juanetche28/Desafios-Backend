@@ -1,0 +1,11 @@
+<div>
+  <h1>Products added to the Cart</b></h1>
+  <ul>
+    {{#each cartfind}}
+      <li><b>Id Product:</b> {{this.pid}}</li>
+      {{!-- <li><b>Title Product:</b> {{this.title}}</li> --}}
+      <li><b>Quantity:</b> {{this.quantity}}</li>
+      <li><b>Remove from the Cart: </b><button>-</button></li>
+      <br>
+    {{/each}}
+  </ul>

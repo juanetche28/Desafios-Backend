@@ -1,0 +1,44 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{{title}}}</title>
+    <link rel="stylesheet" href="/css/styles.css">
+  </head>
+  <body class="p-3 mb-2 bg-colorGama-1">
+    <div className="container-fluid">
+      {{!-- <Link className="navbar-brand" to="/"><img src="/src/images/logo.png" alt="logo Aromas en el Alma" width=60rem/></Link> --}}
+      <button class= "buttonMenu" style = "display: inline">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <a class="aMenu" href="/">Home</a>
+      </button>
+      <button class= "buttonMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <a class="aMenu" href="/login">Sign In</a>
+      </button>
+      <button class= "buttonMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <a class="aMenu" href="/signup">Sign Up</a>
+      </button>
+      <button class= "buttonMenu" id="profile">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <a class="aMenu" href="/profile">Profile</a>
+      </button>
+    </div>
+      {{{body}}}
+      <script src="../../controllers/auth.controller.js"></script>    
+  </body>
+</html>

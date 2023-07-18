@@ -1,0 +1,34 @@
+<div>
+  <div class="col-xs-12">
+    <div class="d-flex justify-content-center">
+      <h1 class="text-body-secondary">List of products</h1>
+    </div>
+  </div>
+  <ul>
+    <div class="d-flex flex-wrap align-items-center justify-content-center">
+      {{#each products.docs}}
+        <div class="card col-xl-3 col-md-5 col-xs-6 bg-colorGama-2 m-3">
+          <img src='{{this.thumbnail}}' class="card-img-top" alt='{{this.description}}'>
+          <h5><small class="text-body-secondary">{{this.title}}</small></h5>
+          {{!-- <h5 class="card-title text-center">{{this.title}}</h5> --}}
+          <p class="card-text p-0 m-0"><li class="ms-4"><b>Price:</b> $ {{this.price}}</li></p>
+          <p class="card-text p-0 m-0"><li class="ms-4"><b>Stock:</b> {{this.stock}}</li></p>
+          <p class="card-text p-0 m-0"><li class="ms-4"><b>ID:</b> {{this._id}}</li></p>
+          <p class="card-text p-0 m-0"><li class="ms-4"><b>Code:</b> {{this.code}}</li></p>
+          <a href="#" class="btn bg-colorGama-6 fw-bold text-white">Add to the Cart</a>
+        </div>
+      {{/each}}
+    </div>
+  </ul>
+  <div>
+    {{#if products.hasPrevPage}}
+      <a href="/?page={{products.prevPage}}">Previous</a>
+    {{/if}}
+
+    <span>Page {{products.page}} of {{products.totalPages}}</span>
+
+    {{#if products.hasNextPage}}
+      <a href="/?page={{products.nextPage}}">Next</a>
+    {{/if}}
+  </div>
+</div>
